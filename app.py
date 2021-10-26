@@ -17,27 +17,25 @@ def index():
     if request.method == 'POST':
         try:
             #  reading the inputs given by the user
-            gre_score=float(request.form['gre_score'])
-            toefl_score = float(request.form['toefl_score'])
-            university_rating = float(request.form['university_rating'])
-            sop = float(request.form['sop'])
-            lor = float(request.form['lor'])
-            cgpa = float(request.form['cgpa'])
-            is_research = request.form['research']
-            if(is_research=='yes'):
-                research=1
-            else:
-                research=0
+            LSTAT=float(request.form['LSTAT'])
+            INDUS = float(request.form['INDUS'])
+            NOX = float(request.form['NOX'])
+            PTRATIO = float(request.form['PTRATIO'])
+            RM = float(request.form['RM'])
+            TAX = float(request.form['TAX'])
+            DIS = float(request.form['DIS'])
+            AGE = float(request.form['AGE'])
             filename = 'finalized_model.pickle'
             loaded_model = pickle.load(open(filename, 'rb')) # loading the model file from the storage
             # predictions using the loaded model file
-            prediction=loaded_model.predict([[gre_score,toefl_score,university_rating,sop,lor,cgpa,research]])
-            print('prediction is', prediction)
+            price=loaded_model.predict([[LSTAT,INDUS,NOX,PTRATIO,RM,TAX,DIS,AGE]])
+            #price = loaded_model.predict([[2, 4, 5, 6, 7, 8, 9, 10]])
+            print('prediction is', price)
             # showing the prediction results in a UI
-            return render_template('results.html',prediction=round(100*prediction[0]))
+            return render_template('results.html',prediction=price)
         except Exception as e:
             print('The Exception message is: ',e)
-            return 'something is wrong'
+            return e
     # return render_template('results.html')
     else:
         return render_template('index.html')
